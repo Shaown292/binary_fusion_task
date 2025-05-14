@@ -1,7 +1,8 @@
 import 'package:binary_fusion_task/constant/app_text_style.dart';
 import 'package:binary_fusion_task/constant/custom_button.dart';
+import 'package:binary_fusion_task/log_in_provider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart' show Provider;
 import 'constant/custom_text_field.dart';
 
 class LogInScreen extends StatelessWidget {
@@ -11,8 +12,11 @@ class LogInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
-    final TextEditingController emailTextEditingController = TextEditingController();
-    final TextEditingController passwordTextEditingController = TextEditingController();
+    final TextEditingController emailTextEditingController =
+        TextEditingController();
+    final TextEditingController passwordTextEditingController =
+        TextEditingController();
+    final loginProvider = Provider.of<LoginProvider>(context);
     return Scaffold(
       body: Container(
         height: deviceHeight,
@@ -43,44 +47,63 @@ class LogInScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                 Center(
-                   child: Column(
-                     children: [
-                       SizedBox(height: 20,),
-                       Text("Sign in", style: AppTextStyle.inter32w600Black,),
-                       SizedBox(height: 10,),
-                       Text("Sign in to my account", style: AppTextStyle.inter16w500Grey,),
-                       SizedBox(height: 30,),
-                     ],
-                   ),
-                 ),
-                    Text("Email", style: AppTextStyle.inter13w400Grey,),
-                    SizedBox(height: 10,),
+                    Center(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 50),
+                          Text("Sign in", style: AppTextStyle.inter32w600Black),
+                          SizedBox(height: 10),
+                          Text(
+                            "Sign in to my account",
+                            style: AppTextStyle.inter16w500Grey,
+                          ),
+                          SizedBox(height: 30),
+                        ],
+                      ),
+                    ),
+                    Text("Email", style: AppTextStyle.inter13w400Grey),
+                    SizedBox(height: 10),
                     CustomTextField(
                       iconData: Icons.email_outlined,
                       hintText: "My Email",
                       controller: emailTextEditingController,
                     ),
-                    SizedBox(height: 20,),
-                    Text("Password", style: AppTextStyle.inter13w400Grey,),
-                    SizedBox(height: 10,),
+                    SizedBox(height: 20),
+                    Text("Password", style: AppTextStyle.inter13w400Grey),
+                    SizedBox(height: 10),
                     CustomTextField(
                       iconData: Icons.qr_code_scanner,
                       hintText: "My Password",
                       controller: passwordTextEditingController,
                       obscureText: true,
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 20),
+                    if (loginProvider.errorMessage != null)
+                      Text(
+                        loginProvider.errorMessage!,
+                        style: TextStyle(color: Colors.red),
+                      ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text("Forgot Password", style: AppTextStyle.inter16w400Purple,),
+                        Text(
+                          "Forgot Password",
+                          style: AppTextStyle.inter16w400Purple,
+                        ),
                       ],
                     ),
-                    SizedBox(height: 30,),
-                    CustomButton(onTap: (){}, titleText: "Sign In"),
-
-
+                    SizedBox(height: 30),
+                    loginProvider.isLoading
+                        ? CircularProgressIndicator()
+                        : CustomButton(
+                          onTap: () {
+                            loginProvider.login(
+                              emailTextEditingController.text.trim(),
+                              passwordTextEditingController.text.trim(),
+                            );
+                          },
+                          titleText: "Sign In",
+                        ),
                   ],
                 ),
               ),

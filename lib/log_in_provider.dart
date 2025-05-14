@@ -10,10 +10,10 @@ class LoginProvider extends ChangeNotifier {
     errorMessage = null;
     notifyListeners();
 
-    // Dummy login logic with delay
     await Future.delayed(Duration(seconds: 2));
 
     if (email == 'test@test.com' && password == '123456') {
+      debugPrint("Success");
       isLoggedIn = true;
     } else {
       errorMessage = "Invalid email or password";
