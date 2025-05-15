@@ -103,7 +103,7 @@ class LogInScreen extends StatelessWidget {
                               context: context
                             );
                           },
-                          titleText: "Sign In",
+                          titleText: "Sign In ",
                         ),
                   ],
                 ),
