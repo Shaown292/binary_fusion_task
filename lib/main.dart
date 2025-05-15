@@ -1,11 +1,17 @@
 import 'package:binary_fusion_task/screens/home_screen.dart';
-import 'package:binary_fusion_task/screens/log_in_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
+import 'hive/note_model.dart';
 import 'providers/log_in_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+
+  Hive.registerAdapter(NoteAdapter());
+  await Hive.openBox<Note>('notes');
   runApp(
     MultiProvider(
       providers: [
