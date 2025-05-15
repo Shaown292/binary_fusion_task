@@ -1,16 +1,104 @@
-# binary_fusion_task
 
-A new Flutter project.
+# 📝 Flutter Task Manager App
 
-## Getting Started
+A simple task management Flutter application with optional authentication, built with clean architecture principles, responsive UI, and state management using Provider or Riverpod.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 📋 Features and Requirements
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 🔐 1. Authentication 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Basic login screen with hardcoded credentials (`test@test.com` / `123456`)
+* Displays error message for invalid credentials
+* Redirects to Task List screen on successful login
+
+### ✅ 2. Task List Screen
+
+* Displays a list of tasks with:
+
+  * **Title**
+  * **Description**
+  * **Due Date**
+  * **Status** (Pending / Completed)
+* Mock data stored locally (Hive)
+* Each task card includes:
+
+  * **Edit** button
+  * **Delete** button
+  * **Status** to toggle task status
+
+### 📝 3. Add/Edit Task Screen
+
+* Form to input:
+
+  * **Title** (required)
+  * **Description** (optional)
+  * **Due Date** (Date Picker)
+  * **Status** toggle (Pending / Completed)
+* Save button with validation and task list update
+
+### 🗂️ 4. State Management
+
+* Uses **Provider** or **Riverpod** for state management and reactive UI updates
+
+### 📱 5. Responsive UI
+
+* Adapts to various screen sizes and devices
+* Follows clean design with Material UI components
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+* Flutter SDK (latest stable version)
+* Dart
+* Android Studio or VS Code with Flutter plugin
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone  https://github.com/Shaown292/binary_fusion_task.git
+   cd flutter-task-manager
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   flutter pub get
+   ```
+
+3. Run the app:
+
+   ```bash
+   flutter run
+   ```
+
+---
+
+## 📦 Dependencies
+
+* `flutter`
+* `provider` 
+* `hive` 
+
+
+---
+
+
+
+## 💡 Notes
+
+* No backend integration; all data is stored locally
+* Easy to extend with real backend services in the future
+* Great for practice or use in interviews / Flutter learning projects
+
+---
+
+
+
+Let me know if you’d like this customized with your GitHub URL, screenshots, or specific packages you're using.
