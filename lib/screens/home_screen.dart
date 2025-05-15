@@ -1,6 +1,7 @@
 import 'package:binary_fusion_task/constant/custom_button.dart';
 import 'package:binary_fusion_task/constant/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../constant/app_text_style.dart';
@@ -385,222 +386,235 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                       )
-                      : SizedBox(
-                        height: deviceHeight - 500,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: box.length,
-                          itemBuilder: (context, index) {
-                            final note = box.getAt(index);
-                            return Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Container(
-                                padding: EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Color(0xFFF9FAFB),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          height: 24,
-                                          width: 24,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(0xFF7A5AF8),
-                                          ),
-                                          child: Center(
-                                            child: Image.asset(
-                                              "assets/images/flash.png",
-                                            ),
-                                          ),
+                      : AnimationLimiter(
+                        child: SizedBox(
+                          height: deviceHeight - 500,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: box.length,
+                            itemBuilder: (context, index) {
+                              final note = box.getAt(index);
+                               return AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 375),
+                                child: SlideAnimation(
+                                  verticalOffset: 50.0,
+                                  child: FadeInAnimation(
+
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Container(
+                                        padding: EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Color(0xFFF9FAFB),
                                         ),
-                                        SizedBox(width: 7),
-                                        Text(
-                                          note?.title ?? '',
-                                          style: AppTextStyle.inter14w600Black,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 6,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              100,
-                                            ),
-                                            color: Color(0xFFEAECF0),
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                height: 12,
-                                                width: 12,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: AssetImage(
-                                                      "assets/images/in_progress.png",
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              Text(
-                                                note!.status.toString(),
-                                                style:
-                                                    AppTextStyle
-                                                        .inter14w600Black,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        InkWell(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder:
-                                                  (_) => AlertDialog(
-                                                    content: Text(
-                                                      note.description,
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed:
-                                                            () => Navigator.pop(
-                                                              context,
-                                                            ),
-                                                        child: Text("Close"),
-                                                      ),
-                                                    ],
-                                                  ),
-                                            );
-                                          },
-                                          child: Container(
-                                            width: 110,
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 4,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
-                                              color: Color(0xFFF95555),
-                                            ),
-                                            child: Row(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
                                               children: [
                                                 Container(
-                                                  height: 9,
-                                                  width: 9,
+                                                  height: 24,
+                                                  width: 24,
                                                   decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: AssetImage(
-                                                        "assets/images/flash.png",
-                                                      ),
+                                                    shape: BoxShape.circle,
+                                                    color: Color(0xFF7A5AF8),
+                                                  ),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      "assets/images/flash.png",
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(width: 5),
+                                                SizedBox(width: 7),
                                                 Text(
-                                                  ///note?.description ?? ''
-                                                  "description",
-                                                  style:
-                                                      AppTextStyle
-                                                          .inter14w600White,
+                                                  note?.title ?? '',
+                                                  style: AppTextStyle.inter14w600Black,
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 10),
-                                    Divider(
-                                      color: Color(0xFF7A5AF8), // Line color
-                                      thickness: 4, // Line thickness
-                                      indent: 4, // Left margin
-                                      endIndent: 4, // Right margin
-                                    ),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          // crossAxisAlignment: CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              height: 16,
-                                              width: 16,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                    "assets/images/calendar.png",
+                                            SizedBox(height: 10),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 6,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(
+                                                      100,
+                                                    ),
+                                                    color: Color(0xFFEAECF0),
+                                                  ),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                        height: 12,
+                                                        width: 12,
+                                                        decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                            image: AssetImage(
+                                                              "assets/images/in_progress.png",
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Text(
+                                                        note!.status.toString(),
+                                                        style:
+                                                        AppTextStyle
+                                                            .inter14w600Black,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ),
+                                                SizedBox(width: 10),
+                                                InkWell(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder:
+                                                          (_) => AlertDialog(
+                                                        content: Text(
+                                                          note.description,
+                                                        ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed:
+                                                                () => Navigator.pop(
+                                                              context,
+                                                            ),
+                                                            child: Text("Close"),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    width: 110,
+                                                    padding: EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                      BorderRadius.circular(100),
+                                                      color: Color(0xFFF95555),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          height: 9,
+                                                          width: 9,
+                                                          decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                              image: AssetImage(
+                                                                "assets/images/flash.png",
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 5),
+                                                        Text(
+                                                          ///note?.description ?? ''
+                                                          "description",
+                                                          style:
+                                                          AppTextStyle
+                                                              .inter14w600White,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(width: 7),
-                                            Text(
-                                              "27th Sept",
-                                              style:
-                                                  AppTextStyle.inter14w600Black,
+                                            SizedBox(height: 10),
+                                            Divider(
+                                              color: Color(0xFF7A5AF8), // Line color
+                                              thickness: 4, // Line thickness
+                                              indent: 4, // Left margin
+                                              endIndent: 4, // Right margin
                                             ),
-                                            SizedBox(width: 10),
+                                            SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  // crossAxisAlignment: CrossAxisAlignment.end,
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                                  children: [
+                                                    Container(
+                                                      height: 16,
+                                                      width: 16,
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                            "assets/images/calendar.png",
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 7),
+                                                    Text(
+                                                      "27th Sept",
+                                                      style:
+                                                      AppTextStyle.inter14w600Black,
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    CustomButton(
+                                                      onTap: () {
+                                                        _showEditForm(context, note);
+                                                      },
+                                                      titleText: "edit",
+                                                      width: 70,
+                                                      height: 30,
+                                                    ),
+                                                    SizedBox(width: 20),
+                                                    CustomButton(
+                                                      onTap: () {
+                                                        note.delete(); // Delete the note from Hive
+                                                      },
+                                                      titleText: "Delete",
+                                                      color: Colors.red,
+                                                      width: 70,
+                                                      height: 30,
+                                                      linearGradient: LinearGradient(
+                                                        colors: [
+                                                          Colors.red,
+                                                          Colors.redAccent,
+                                                        ],
+                                                        begin: Alignment.topCenter,
+                                                        end: Alignment.bottomCenter,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ],
                                         ),
-                                        Row(
-                                          children: [
-                                            CustomButton(
-                                              onTap: () {
-                                                _showEditForm(context, note);
-                                              },
-                                              titleText: "edit",
-                                              width: 70,
-                                              height: 30,
-                                            ),
-                                            SizedBox(width: 20),
-                                            CustomButton(
-                                              onTap: () {
-                                                note.delete(); // Delete the note from Hive
-                                              },
-                                              titleText: "Delete",
-                                              color: Colors.red,
-                                              width: 70,
-                                              height: 30,
-                                              linearGradient: LinearGradient(
-                                                colors: [
-                                                  Colors.red,
-                                                  Colors.redAccent,
-                                                ],
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+
+                            },
+                          ),
                         ),
                       );
                 },
