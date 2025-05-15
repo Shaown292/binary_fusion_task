@@ -1,4 +1,5 @@
 import 'package:binary_fusion_task/screens/home_screen.dart';
+import 'package:binary_fusion_task/screens/log_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: HomeScreen(),
+      home: LogInScreen(),
     );
   }
 }

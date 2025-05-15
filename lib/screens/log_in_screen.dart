@@ -94,12 +94,13 @@ class LogInScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 30),
                     loginProvider.isLoading
-                        ? CircularProgressIndicator()
+                        ? Center(child: CircularProgressIndicator())
                         : CustomButton(
                           onTap: () {
                             loginProvider.login(
-                              emailTextEditingController.text.trim(),
-                              passwordTextEditingController.text.trim(),
+                             email:  emailTextEditingController.text.trim(),
+                             password:  passwordTextEditingController.text.trim(),
+                              context: context
                             );
                           },
                           titleText: "Sign In",
