@@ -2,13 +2,13 @@ import 'package:binary_fusion_task/constant/app_text_style.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  final IconData iconData;
+  final IconData? iconData;
   final String hintText;
   final TextEditingController controller;
   final bool obscureText;
 
   const CustomTextField(
-      {super.key, required this.iconData, required this.hintText, required this.controller, this.obscureText = false});
+      {super.key,  this.iconData, required this.hintText, required this.controller, this.obscureText = false});
 
   @override
   Widget build(BuildContext context) {

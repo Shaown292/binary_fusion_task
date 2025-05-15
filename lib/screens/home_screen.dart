@@ -1,7 +1,6 @@
 import 'package:binary_fusion_task/constant/custom_button.dart';
 import 'package:binary_fusion_task/constant/custom_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../constant/app_text_style.dart';
@@ -47,7 +46,8 @@ class HomeScreen extends StatelessWidget {
             ),
             CustomButton(
               onTap: () async {
-                final note = Note(title: titleController.text,
+                final note = Note(
+                  title: titleController.text,
                   description: descriptionController.text,
                   status: "pending", // default
                 );
@@ -60,7 +60,6 @@ class HomeScreen extends StatelessWidget {
               height: 40,
               width: 120,
             ),
-
           ],
         );
       },
@@ -74,69 +73,77 @@ class HomeScreen extends StatelessWidget {
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Edit Note"),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: InputDecoration(labelText: "Title"),
+      builder:
+          (_) => AlertDialog(
+            title: Text("Edit Note"),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomTextField(
+                    hintText: "Title",
+                    controller: titleController,
+                    iconData: Icons.title_outlined,
+                  ),
+                  SizedBox(height: 10),
+                  CustomTextField(
+                    hintText: "Description",
+                    controller: descriptionController,
+                    iconData: Icons.description_outlined,
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: selectedStatus,
+                    items:
+                        ["pending", "done", "in progress"]
+                            .map(
+                              (status) => DropdownMenuItem(
+                                value: status,
+                                child: Text(status),
+                              ),
+                            )
+                            .toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        selectedStatus = value;
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Status",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              TextField(
-                controller: descriptionController,
-                decoration: InputDecoration(labelText: "Description"),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Cancel"),
               ),
-              DropdownButtonFormField<String>(
-                value: selectedStatus,
-                items: ["pending", "done"]
-                    .map((status) => DropdownMenuItem(
-                  value: status,
-                  child: Text(status),
-                ))
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    selectedStatus = value;
-                  }
+              CustomButton(
+                onTap: () {
+                  note.title = titleController.text;
+                  note.description = descriptionController.text;
+                  note.status = selectedStatus;
+                  note.save(); // Save changes to Hive
+                  Navigator.pop(context);
                 },
-                decoration: InputDecoration(labelText: "Status"),
+                titleText: "Save",
+                width: 80,
+                height: 50,
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              note.title = titleController.text;
-              note.description = descriptionController.text;
-              note.status = selectedStatus;
-              note.save(); // Save changes to Hive
-              Navigator.pop(context);
-            },
-            child: Text("Save"),
-          ),
-        ],
-      ),
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final deviceWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final deviceHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Color(0xFFF1F3F8),
       body: Column(
@@ -192,6 +199,8 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  //// Dummy Data for design purpose only
                   Positioned(
                     bottom: -50,
                     child: Container(
@@ -218,7 +227,6 @@ class HomeScreen extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-
                                 /// Total device width - Total spacing and padding
                                 width: deviceWidth / 3 - 30,
                                 padding: EdgeInsets.all(10),
@@ -343,198 +351,259 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
+
               ValueListenableBuilder(
                 valueListenable: Hive.box<Note>('notes').listenable(),
                 builder: (context, Box<Note> box, _) {
-                  return box.values.isEmpty ? Center(
-                      child: Text('No notes yet.')) : SizedBox(
-                    height: deviceHeight - 500,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: box.length,
-                      itemBuilder: (context, index) {
-                        final note = box.getAt(index);
-                        return Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Container(
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Color(0xFFF9FAFB),
+                  return box.values.isEmpty
+                      ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 90,
+                              width: deviceWidth / 2,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    "assets/images/no_task.png",
+                                  ),
+                                ),
+                              ),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 24,
-                                      width: 24,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xFF7A5AF8),
-                                      ),
-                                      child: Center(
-                                        child: Image.asset(
-                                          "assets/images/flash.png",
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 7),
-                                    Text(
-                                      note?.title ?? '',
-                                      style: AppTextStyle.inter14w600Black,
-                                    ),
-                                  ],
+                            SizedBox(height: 30),
+                            Text(
+                              "No Task Assigned",
+                              style: AppTextStyle.inter14w600Black,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "It looks like you don’t have any tasks assigned to you right now. Don’t worry, this space will be updated as new tasks become available.",
+                              style: AppTextStyle.inter10w400Grey,
+                            ),
+                          ],
+                        ),
+                      )
+                      : SizedBox(
+                        height: deviceHeight - 500,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: box.length,
+                          itemBuilder: (context, index) {
+                            final note = box.getAt(index);
+                            return Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Container(
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Color(0xFFF9FAFB),
                                 ),
-                                SizedBox(height: 10),
-                                Row(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            100),
-                                        color: Color(0xFFEAECF0),
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            height: 12,
-                                            width: 12,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                  "assets/images/in_progress.png",
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            note!.status.toString(),
-                                            style: AppTextStyle.inter14w600Black,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    InkWell(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) =>
-                                              AlertDialog(
-                                                content: Text(
-                                                    note?.description ??
-                                                        'No Description'),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(context),
-                                                    child: Text("Close"),
-                                                  )
-                                                ],
-                                              ),
-                                        );
-                                      },
-                                      child: Container(
-                                        width: 110,
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              100),
-                                          color: Color(0xFFF95555),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              height: 9,
-                                              width: 9,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                    "assets/images/flash.png",
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-
-                                              ///note?.description ?? ''
-                                              "description",
-                                              style: AppTextStyle
-                                                  .inter14w600White,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Divider(
-                                  color: Color(0xFF7A5AF8), // Line color
-                                  thickness: 4, // Line thickness
-                                  indent: 4, // Left margin
-                                  endIndent: 4, // Right margin
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    CustomButton(
-                                      onTap: () {
-                                        _showEditForm(context, note);
-                                        },
-                                      titleText: "edit",
-                                      width: 70,
-                                      height: 30,
-                                    ),
                                     Row(
-                                      // crossAxisAlignment: CrossAxisAlignment.end,
-                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Container(
-                                          height: 16,
-                                          width: 16,
+                                          height: 24,
+                                          width: 24,
                                           decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                "assets/images/calendar.png",
-                                              ),
+                                            shape: BoxShape.circle,
+                                            color: Color(0xFF7A5AF8),
+                                          ),
+                                          child: Center(
+                                            child: Image.asset(
+                                              "assets/images/flash.png",
                                             ),
                                           ),
                                         ),
                                         SizedBox(width: 7),
                                         Text(
-                                          "27th Sept",
+                                          note?.title ?? '',
                                           style: AppTextStyle.inter14w600Black,
                                         ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              100,
+                                            ),
+                                            color: Color(0xFFEAECF0),
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                height: 12,
+                                                width: 12,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: AssetImage(
+                                                      "assets/images/in_progress.png",
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text(
+                                                note!.status.toString(),
+                                                style:
+                                                    AppTextStyle
+                                                        .inter14w600Black,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                         SizedBox(width: 10),
+                                        InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder:
+                                                  (_) => AlertDialog(
+                                                    content: Text(
+                                                      note.description,
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed:
+                                                            () => Navigator.pop(
+                                                              context,
+                                                            ),
+                                                        child: Text("Close"),
+                                                      ),
+                                                    ],
+                                                  ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 110,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              color: Color(0xFFF95555),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  height: 9,
+                                                  width: 9,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: AssetImage(
+                                                        "assets/images/flash.png",
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  ///note?.description ?? ''
+                                                  "description",
+                                                  style:
+                                                      AppTextStyle
+                                                          .inter14w600White,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Divider(
+                                      color: Color(0xFF7A5AF8), // Line color
+                                      thickness: 4, // Line thickness
+                                      indent: 4, // Left margin
+                                      endIndent: 4, // Right margin
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          // crossAxisAlignment: CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              height: 16,
+                                              width: 16,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                    "assets/images/calendar.png",
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 7),
+                                            Text(
+                                              "27th Sept",
+                                              style:
+                                                  AppTextStyle.inter14w600Black,
+                                            ),
+                                            SizedBox(width: 10),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            CustomButton(
+                                              onTap: () {
+                                                _showEditForm(context, note);
+                                              },
+                                              titleText: "edit",
+                                              width: 70,
+                                              height: 30,
+                                            ),
+                                            SizedBox(width: 20),
+                                            CustomButton(
+                                              onTap: () {
+                                                note.delete(); // Delete the note from Hive
+                                              },
+                                              titleText: "Delete",
+                                              color: Colors.red,
+                                              width: 70,
+                                              height: 30,
+                                              linearGradient: LinearGradient(
+                                                colors: [
+                                                  Colors.red,
+                                                  Colors.redAccent,
+                                                ],
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                              ),
+                            );
+                          },
+                        ),
+                      );
                 },
-
               ),
             ],
           ),

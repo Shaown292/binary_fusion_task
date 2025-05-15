@@ -5,8 +5,10 @@ class CustomButton extends StatelessWidget {
   final Function()? onTap;
   final double? height;
   final double? width;
+  final Color? color;
+  final LinearGradient? linearGradient;
 
-  const CustomButton({super.key, required this.onTap, required this.titleText, this.height, this.width});
+  const CustomButton({super.key, required this.onTap, required this.titleText, this.height, this.width, this.color, this.linearGradient});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,8 @@ class CustomButton extends StatelessWidget {
         width: width ?? double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          gradient: LinearGradient(
+          color: color,
+          gradient: linearGradient ?? LinearGradient(
             colors: [Color(0xFFA787FF), Color(0xFF4F1ED8),],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
