@@ -1,9 +1,9 @@
 import 'package:binary_fusion_task/constant/app_text_style.dart';
 import 'package:binary_fusion_task/constant/custom_button.dart';
-import 'package:binary_fusion_task/log_in_provider.dart';
+import 'package:binary_fusion_task/providers/log_in_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
-import 'constant/custom_text_field.dart';
+import '../constant/custom_text_field.dart';
 
 class LogInScreen extends StatelessWidget {
   const LogInScreen({super.key});

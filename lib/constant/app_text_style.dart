@@ -10,10 +10,34 @@ class AppTextStyle{
     color: Color(0xFF101828),
 
   );
+  static  TextStyle inter14w600Black = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF101828),
+
+  );
+  static  TextStyle inter24w600White = GoogleFonts.inter(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFFFEFEFE),
+
+  );
+  static  TextStyle inter14w600White = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFFFEFEFE),
+
+  );
   static  TextStyle inter16w500Grey = GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: Color(0xFF475467),
+
+  );
+  static  TextStyle inter13w500LightPurple = GoogleFonts.inter(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFFD9D6FE),
 
   );
   static  TextStyle inter16w400Purple = GoogleFonts.inter(
@@ -28,6 +52,7 @@ class AppTextStyle{
     color: Color(0xFF475467),
 
   );
+
 
 
 }

@@ -1,8 +1,9 @@
-import 'package:binary_fusion_task/log_in_screen.dart';
+import 'package:binary_fusion_task/screens/home_screen.dart';
+import 'package:binary_fusion_task/screens/log_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'log_in_provider.dart';
+import 'providers/log_in_provider.dart';
 
 void main() {
   runApp(
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: LogInScreen(),
+      home: HomeScreen(),
     );
   }
 }
